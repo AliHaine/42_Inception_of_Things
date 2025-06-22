@@ -3,5 +3,14 @@ kind: Ingress
 metadata:
   name: main-ingress
 spec:
+  ingressClassName: traefik 
   rules:
-  - host: example.com
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: app1
+            port:
+              number: 80
