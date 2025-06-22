@@ -6,13 +6,20 @@ _This project focuses on deepening Kubernetes knowledge by using K3d and K3s wit
 |----------|----------|
 |vagrant up|Starts the VM using the configuration in the Vagrantfile|
 |vagrnt halt|Shuts down all VM managed by the current Vagrantfile|
+|vagrnt provision|Runs provisioners (scripts) without reboooting VM|
 |vagrant destroy [name]|Destroys and removes the specified VM|
 |vagrant status [name]|Display the status and revelant info about the managed VM|
 |vagrant ssh [hostname]|Connect with SSH to the specified VM|
-|kubectl get pods --all-namespaces|Display all pods|
+|kubectl get pods|Display all pods|
 |kubectl get ingressclass|Display the available ingressClass|
-|kubectl get endpoints||
-|kubectl get svc||
+|kubectl get endpoints|Display ip and ports of pods|
+|kubectl get svc|Display all the services|
+|kubectl logs -n [name_space] [pod_name]|Display the target logs|
+|kubectl delete [type] [name] -n [name_space]|Delete the target element|
+|kubectl describe [type] [name]|Display health and aditional informations|
+|kubectl apply -f [file_conf] |Update kubernetes based on the specified config|
+
+_--all-namespaces option is usable to avoid name_space specification_
 
 ## Part 1 
 
@@ -64,7 +71,73 @@ end
 
 _Earlier we set up VMs but without any apps running on them. So, Part 2 concists in setting up several apps in single virtual machines_
 
-Each 'apps' will be a service
+Each app will have a Service linked to a specific Deployment. Here’s a simple service configuration:
+
+```
+apiVersion: v1
+kind: Service                # Type of Kubernetes resource
+metadata:
+  name: app1                 # Service name, used by the Deployment to target the Service
+spec:
+  selector:
+    app: app1                # Selects the Pods with label 'app: app1'
+  ports:
+    - protocol: TCP
+      port: 80               # Service port (accessible by other resources)
+      targetPort: 8080       # Port exposed by the container inside the Pod
+```
+
+Now, a Deployment is needed to run the Pods:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1
+  labels:
+    app: app1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      containers:
+        - name: hello-kubernetes
+          image: paulbouwer/hello-kubernetes:1.10
+          env:
+          - name: MESSAGE
+            value: "Hello from app1."
+          ports:
+            - containerPort: 8080
+```
+
+Finally, traffic is managed by an Ingress (using Traefik (default) in this example):
+
+```
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: app1.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app1
+            port:
+              number: 80
+```
+
+This configuration means:
+Everything sent to app1.com at the root path / will be redirected to the Service named app1 on port 80
+
+Then, the service will look to a deployment with name 'app1'
 
 ## Part 3
 
