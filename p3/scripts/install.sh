@@ -24,7 +24,17 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 #install kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+KUBECTL_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt)
+
+if [ -z "$KUBECTL_VERSION" ]; then
+  echo "Error: Could not get kubectl version"
+  exit 1
+fi
+
+echo "Downloading kubectl version $KUBECTL_VERSION"
+
+curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 

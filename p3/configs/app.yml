@@ -1,38 +1,35 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app1
+  name: will
 spec:
   selector:
-    app: app1
+    app: will
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 8888
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app1
+  name: will
   labels:
-    app: app1
+    app: will
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app1
+      app: will
   template:
     metadata:
       labels:
-        app: app1
+        app: will
     spec:
       containers:
-        - name: hello-kubernetes
-          image: paulbouwer/hello-kubernetes:1.10
-          env:
-          - name: MESSAGE
-            value: "Hello from app1."
-          ports:
-            - containerPort: 8080
+        - name: will
+          image: wil42/playground:v2
+        ports:
+        - containerPort: 8888
