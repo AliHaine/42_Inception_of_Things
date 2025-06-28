@@ -17,7 +17,10 @@ _This project focuses on deepening Kubernetes knowledge by using K3d and K3s wit
 |kubectl logs -n [name_space] [pod_name]|Display the target logs|
 |kubectl delete [type] [name] -n [name_space]|Delete the target element|
 |kubectl describe [type] [name]|Display health and aditional informations|
-|kubectl apply -f [file_conf] |Update kubernetes based on the specified config|
+|k3d cluster create [name] -p "8080:80@loadbalancer"|Create cluster with loadbalancer|
+|k3d cluster stop [cluster]|Stop the target l3d cluster|
+|k3d cluster delete [cluster]|Delete the target k3d cluster|
+|k3d cluster list|List all current cluster run with k3d|
 
 _--all-namespaces option is usable to avoid name_space specification_
 
