@@ -6,12 +6,12 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
+  project: default
   destination:
     namespace: dev
     server: https://kubernetes.default.svc
-  project: default
   source:
-    path: .
+    path: p3/configs
     repoURL: "https://github.com/AliHaine/42_Inception_of_Things"
     targetRevision: v1
   syncPolicy:
