@@ -38,6 +38,9 @@ until kubectl get svc will -n dev >/dev/null 2>&1; do
     sleep 1
 done
 
+echo "Waiting for will app to be ready..."
+kubectl wait --namespace dev --for=condition=Available deployment will --timeout=120s
+
 # Port-forward in background for will app
 echo "Starting port-forward to will app..."
 kubectl port-forward svc/will -n dev 8888:80 >/dev/null &
