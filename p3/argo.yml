@@ -15,8 +15,6 @@ spec:
     repoURL: "https://github.com/AliHaine/42_Inception_of_Things"
     targetRevision: v1
   syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
     automated:
       prune: true
       selfHeal: true
