@@ -11,7 +11,7 @@ spec:
   source:
     path: p3/configs
     repoURL: "https://github.com/AliHaine/42_Inception_of_Things"
-    targetRevision: v1
+    targetRevision: v2
   syncPolicy:
     automated:
       prune: true
