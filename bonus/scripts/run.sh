@@ -9,6 +9,7 @@ fi
 k3d cluster create maincluster -p "8080:80@loadbalancer"
 kubectl create namespace argocd
 kubectl create namespace dev
+kubectl create namespace gitlab
 
 #Install the argocd application
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -47,6 +48,15 @@ sleep 5
 # Port-forward in background for will app
 echo "Starting port-forward to will app..."
 kubectl port-forward svc/will -n dev 8888:80 >/dev/null &
+
+helm repo add gitlab https://charts.gitlab.io/
+#GitLab setup
+helm install gitlab gitlab/gitlab \
+  --namespace gitlab \
+  --set global.edition=ce \
+  --set global.hosts.domain=127.0.0.1.nip.io \
+  --set certmanager-issuer.email=test@local.test \
+  --set global.ingress.configureCertmanager=false
 
 echo "Setup complete."
 echo "You can access ArgoCD GUI at https://localhost:8081"

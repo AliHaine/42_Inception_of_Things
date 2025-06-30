@@ -144,4 +144,21 @@ Then, the service will look to a deployment with name 'app1'
 
 ## Part 3
 
+_Set up everything you have just learnt (and more) but without Vagrant this time. We will use K3D and implement a Continuous Deployment (CD) strategy with ArgoCD._
+
+The goal is to connect (sync) a GitHub repository to the cluster. This way, whenever someone pushes to the repository's HEAD, the cluster will automatically fetch and deploy the new version.
+
+Steps:
+- Install K3D and kubectl on your machine (installation script available in install.sh).
+- Create a K3D cluster with a loadbalancer
+- Create the necessary namespaces (for your app and for argoCD)
+- Install the default argoCD application 
+- Enable port forwarding to access the argoCD dashboard
+- Apply our argocd Configuration.
+
+And that's it.
+
+All the steps details are available in run.sh
+
 ## Bonus
+
