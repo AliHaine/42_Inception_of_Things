@@ -9,8 +9,8 @@ spec:
     namespace: dev
     server: https://kubernetes.default.svc
   source:
-    path: p3/configs
-    repoURL: "https://github.com/AliHaine/42_Inception_of_Things"
+    path: ./configs
+    repoURL: "https://github.com/AliHaine/ayagmur-ception"
   syncPolicy:
     automated:
       prune: true

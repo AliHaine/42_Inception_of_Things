@@ -6,7 +6,7 @@ if k3d cluster get maincluster >/dev/null 2>&1; then
     k3d cluster delete maincluster
 fi
 
-k3d cluster create maincluster -p "8080:80@loadbalancer"
+k3d cluster create maincluster -p "8080:80@loadbalancer" -p "8888:80@loadbalancer"
 kubectl create namespace argocd
 kubectl create namespace dev
 
@@ -43,10 +43,6 @@ kubectl wait --namespace dev --for=condition=Available deployment will --timeout
 
 #Wait for port stabilization
 sleep 5
-
-# Port-forward in background for will app
-echo "Starting port-forward to will app..."
-kubectl port-forward svc/will -n dev 8888:80 >/dev/null &
 
 echo "Setup complete."
 echo "You can access ArgoCD GUI at https://localhost:8081"
