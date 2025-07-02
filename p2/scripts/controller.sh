@@ -3,9 +3,11 @@ sudo mkdir -p /home/vagrant/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
 sudo chown -R vagrant:vagrant /home/vagrant/.kube/config
 
-sleep 15
+echo "192.168.56.110 app1.com app2.com app3.com" | sudo tee -a /etc/hosts
 
-kubectl apply -f ../../vagrant/app1.yml
-kubectl apply -f ../../vagrant/app2.yml
-kubectl apply -f ../../vagrant/app3.yml
-kubectl apply -f ../../vagrant/controller.yml
+sleep 10
+
+kubectl apply -n kube-system -f ../../vagrant/app1.yml
+kubectl apply -n kube-system -f ../../vagrant/app2.yml
+kubectl apply -n kube-system -f ../../vagrant/app3.yml
+kubectl apply -n kube-system -f ../../vagrant/controller.yml

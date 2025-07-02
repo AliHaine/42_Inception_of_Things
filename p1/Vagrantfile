@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 		vb.name = "ayagmurS"
         vb.memory = 512
         vb.cpus = 1
-	end
+	  end
 	node.vm.provision "shell", path: "./scripts/controller.sh"
   end
 
