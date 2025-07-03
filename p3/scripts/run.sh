@@ -39,7 +39,7 @@ until kubectl get svc will -n dev >/dev/null 2>&1; do
 done
 
 echo "Waiting for will app to be ready..."
-kubectl wait --namespace dev --for=condition=Available deployment will --timeout=120s
+kubectl wait --namespace dev --for=condition=Available deployment will --timeout=320s
 
 #Wait for port stabilization
 sleep 5
