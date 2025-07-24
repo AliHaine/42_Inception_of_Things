@@ -1,7 +1,4 @@
-install:
-	sh ./scripts/install.sh
-	
-run:
+up:
 	sh ./scripts/run.sh
 	
 down:
