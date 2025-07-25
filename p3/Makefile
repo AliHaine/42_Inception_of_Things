@@ -1,8 +1,6 @@
 up:
-	sh ./scripts/run.sh
-	
+	cd confs && vagrant up
+
 down:
-	k3d cluster delete maincluster
-	
-all: install run
-	 @echo "Starting ..."
+	cd confs && vagrant destroy -f ayagmur
+	cd confs && vagrant status
