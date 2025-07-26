@@ -1,10 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: main-ingress
+  name: will-ingress
   namespace: dev
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
-  ingressClassName: traefik
   rules:
   - http:
       paths:
@@ -14,4 +15,4 @@ spec:
           service:
             name: will
             port:
-              number: 80
+              number: 8888

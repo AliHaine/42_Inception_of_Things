@@ -2,12 +2,16 @@
 
 sudo apt-get update -y
 export PATH="$HOME/bin:$PATH"
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 
 #docker
 
-curl -fsSL https://get.docker.com | sh
+sudo apt-get install docker.io -y
 
-docker -v
+sudo usermod -aG docker $USER
+newgrp docker
+
+docker --version
 
 ##k3d
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
@@ -26,7 +30,7 @@ if k3d cluster get maincluster >/dev/null 2>&1; then
     k3d cluster delete maincluster
 fi
 
-k3d cluster create maincluster -p "8080:80@loadbalancer" -p "8888:80@loadbalancer"
+k3d cluster create maincluster -p "8080:80@loadbalancer" -p "8888:8888@loadbalancer" 
 kubectl create namespace argocd
 kubectl create namespace dev
 
@@ -45,15 +49,17 @@ sleep 5
 
 # Port-forward in background
 echo "Starting port-forward to ArgoCD GUI..."
-kubectl port-forward svc/argocd-server -n argocd 8081:80 >/dev/null 2>&1 &
+kubectl port-forward svc/argocd-server -n argocd 8080:80 >/dev/null 2>&1 &
 
 #Wait for port stabilization
 sleep 5
 
+# Apply ingress for will
+kubectl apply -n dev -f /vagrant/ingress.yml
+
 #Apply my argo manifest
-ls -a
 echo "Applying argocd custom manifest"
-kubectl apply -n argocd -f /vagrant/confs/argo.yml
+kubectl apply -n argocd -f /vagrant/argo.yml
 
 until kubectl get svc will -n dev >/dev/null 2>&1; do
     sleep 1
