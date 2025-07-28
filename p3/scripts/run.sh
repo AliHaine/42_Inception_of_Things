@@ -30,7 +30,8 @@ if k3d cluster get maincluster >/dev/null 2>&1; then
     k3d cluster delete maincluster
 fi
 
-k3d cluster create maincluster -p "8080:80@loadbalancer" -p "8888:8888@loadbalancer" 
+k3d cluster create maincluster -p "8080:80@loadbalancer" -p "8888:31888@loadbalancer"
+  
 kubectl create namespace argocd
 kubectl create namespace dev
 
@@ -44,18 +45,14 @@ echo "\nArgoCD Admin Password:\n"
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d
 echo "\n"
 
-#Wait for port stabilization
+kubectl -n argocd patch deployment argocd-server \
+  --type='json' \
+  -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--insecure"}]'
+
+echo "Waiting for ArgoCD server to restart..."
+kubectl rollout status deployment argocd-server -n argocd
+
 sleep 5
-
-# Port-forward in background
-echo "Starting port-forward to ArgoCD GUI..."
-kubectl port-forward svc/argocd-server -n argocd 8080:80 >/dev/null 2>&1 &
-
-#Wait for port stabilization
-sleep 5
-
-# Apply ingress for will
-kubectl apply -n dev -f /vagrant/ingress.yml
 
 #Apply my argo manifest
 echo "Applying argocd custom manifest"

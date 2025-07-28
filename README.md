@@ -12,6 +12,7 @@ _This project focuses on deepening Kubernetes knowledge by using K3d and K3s wit
 |vagrant ssh [hostname]|Connect with SSH to the specified VM|
 |kubectl get pods|Display all pods|
 |kubectl get ingressclass|Display the available ingressClass|
+|kubectl get ingress -A|Display all the ingresses|
 |kubectl get endpoints|Display ip and ports of pods|
 |kubectl get svc|Display all the services|
 |kubectl logs -n [name_space] [pod_name]|Display the target logs|
