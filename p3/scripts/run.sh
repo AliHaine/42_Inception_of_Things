@@ -38,9 +38,12 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 #Disable https only (allow unsafe mode)
-kubectl patch deployment argocd-server -n argocd \
-  --type json \
-  -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--insecure"}]'
+kubectl -n argocd patch deployment argocd-server \
+  --type='json' \
+  -p='[
+    {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--insecure"},
+    {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--disable-auth"}
+]'
 
 #Disable password for ArgoCD dashboard
 kubectl patch configmap argocd-cm -n argocd \
