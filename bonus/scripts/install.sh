@@ -1,37 +1,27 @@
 #!/bin/bash
 
-sudo apt update
+sudo apt-get update -y
+export PATH="$HOME/bin:$PATH"
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 
-#install helm
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-helm version
+#docker
 
-#install prerequisites
-sudo apt install -y ca-certificates curl
+sudo apt-get install docker.io -y
 
-#install docker key and whatever
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
+sudo usermod -aG docker $USER
+newgrp docker
 
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-https://download.docker.com/linux/ubuntu \
-$(lsb_release -cs) stable" | \
-sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+docker --version
 
-#install Docker
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+##k3d
+curl -Lo k3d "https://github.com/k3d-io/k3d/releases/download/v5.8.3/k3d-linux-amd64"
+chmod +x k3d
+mv k3d /usr/local/bin/k3d
 
-#install k3d
-curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+##kubectl
+mkdir -p ~/bin
+curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o ~/bin/kubectl
+chmod +x ~/bin/kubectl
 
-#install kubectl
-curl -LO "https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl"
-
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/
-
+k3d version
 kubectl version --client

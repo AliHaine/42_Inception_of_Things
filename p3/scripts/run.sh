@@ -34,7 +34,6 @@ kubectl create namespace dev
 
 #Install the argocd application
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 #Disable https only (allow unsafe mode)
@@ -44,11 +43,6 @@ kubectl -n argocd patch deployment argocd-server \
     {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--insecure"},
     {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--disable-auth"}
 ]'
-
-#Disable password for ArgoCD dashboard
-kubectl patch configmap argocd-cm -n argocd \
-  --type merge \
-  -p '{"data": {"admin.enabled": "true", "dex.config": "", "users.anonymous.enabled": "true"}}'
 
 echo "Waiting for ArgoCD server to be ready..."
 kubectl rollout status deployment argocd-server -n argocd

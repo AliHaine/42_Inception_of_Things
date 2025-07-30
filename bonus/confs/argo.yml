@@ -9,7 +9,7 @@ spec:
     namespace: dev
     server: https://kubernetes.default.svc
   source:
-    path: ./configs
+    path: .
     repoURL: "https://github.com/AliHaine/ayagmur-ception"
   syncPolicy:
     automated:
