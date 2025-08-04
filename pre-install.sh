@@ -12,7 +12,7 @@ sleep 1
 rm -rf ./vagrant_2.4.7_linux_amd64.zip
 
 ##k3d
-curl -Lo ~/bin/k3d https://github.com/k3d-io/k3d/releases/download/v5.7.0/k3d-linux-amd64
+curl -Lo ~/bin/k3d https://github.com/k3d-io/k3d/releases/download/v5.8.3/k3d-linux-amd64
 chmod +x ~/bin/k3d
 
 ##kubectl

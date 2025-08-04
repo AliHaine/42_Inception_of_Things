@@ -9,7 +9,6 @@ echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 sudo apt-get install docker.io -y
 
 sudo usermod -aG docker $USER
-newgrp docker
 
 docker --version
 
@@ -49,7 +48,11 @@ kubectl rollout status deployment argocd-server -n argocd
 
 #Apply my argo manifest
 echo "Applying argocd custom manifest"
-kubectl apply -n argocd -f /vagrant/argo.yml
+if [ -f /vagrant/argo.yml ]; then
+  kubectl apply -n argocd -f /vagrant/argo.yml
+else
+  kubectl apply -n argocd -f /vagrant/confs/argo.yml
+fi
 
 until kubectl get svc will -n dev >/dev/null 2>&1; do
     sleep 1
