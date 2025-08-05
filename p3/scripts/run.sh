@@ -40,7 +40,6 @@ kubectl -n argocd patch deployment argocd-server \
   --type='json' \
   -p='[
     {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--insecure"},
-    {"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--disable-auth"}
 ]'
 
 echo "Waiting for ArgoCD server to be ready..."
@@ -62,3 +61,8 @@ echo "Waiting for will app to be ready..."
 kubectl wait --namespace dev --for=condition=Available deployment will --timeout=320s
 
 echo "Setup complete."
+
+echo "Login"
+echo "admin"
+echo "Password"
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d

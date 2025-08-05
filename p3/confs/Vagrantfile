@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/focal64"
+  config.vm.box = "ubuntu/jammy64"
   config.vm.network "forwarded_port", guest: 8080, host: 9090
   config.vm.network "forwarded_port", guest: 8888, host: 8888
   config.vm.define "ayagmur" do |node|
